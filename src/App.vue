@@ -84,7 +84,7 @@ import { ref, nextTick } from "vue";
 import html2canvas from "html2canvas";
 import { callPrinter } from "call-printer";
 import MD5 from "md5";
-import axios from "axios";
+import fetch from "fetch-jsonp";
 import title from "./assets/HOKO_WEB_Title.svg";
 import title2 from "./assets/HOKO_WEB_Title_2.svg";
 
@@ -126,24 +126,26 @@ const translate = async (lang: string) => {
 
 const translateApi = (query: string, from: "zh" | "en", to: "zh" | "en") => {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     const appid = "20240508002045465";
     const key = "kKJZxIySKgFAX4bdfOhr";
     const salt = new Date().getTime();
     const str1 = appid + query + salt + key;
     const sign = MD5(str1);
     try {
-      const { data } = await axios.get("/baiduApi/api/trans/vip/translate", {
-        params: {
-          q: query,
-          appid,
-          salt,
-          from,
-          to,
-          sign,
-        },
-      });
-      resolve(data);
+      const api = `https://api.fanyi.baidu.com/api/trans/vip/translate?q=${query}&from=${from}&to=${to}&appid=${appid}&salt=${salt}&sign=${sign}`;
+      fetch(api, {
+        jsonpCallback: "cb",
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       alert("翻译失败，请稍后再试。");
     }

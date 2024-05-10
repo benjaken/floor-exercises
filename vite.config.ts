@@ -6,6 +6,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/floor-exercises',
+  build: {
+    outDir: 'docs'
+  },
   plugins: [
     vue(),
     VitePWA({
@@ -41,7 +45,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/baiduApi': {
-        target: 'http://api.fanyi.baidu.com',
+        target: 'https://api.fanyi.baidu.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/baiduApi/, ''),
       }
