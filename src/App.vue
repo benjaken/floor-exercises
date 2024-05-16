@@ -1,6 +1,6 @@
 <template>
   <div class="floor">
-    <img class="floor__title" :src="title" alt="title1" @click="previewVisible = false" />
+    <img class="floor__title" :src="title" alt="title1" @click="goHome()" />
     <img class="floor__title2" :src="title2" alt="ttile2" />
     <div
       :class="[
@@ -200,6 +200,12 @@ const confirmPrint = async () => {
   callPrinter(
     `<img src="${image.toDataURL("image/png")}" width="${width}px" height="${height}px"/>`
   );
+};
+
+const goHome = () => {
+  inputZh.value = "";
+  inputEn.value = "";
+  previewVisible.value = false;
 };
 
 // onMounted(() => {
